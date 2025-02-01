@@ -39,6 +39,38 @@ class TaxCalculator:
             'monthly_in_hand': (income - final_tax) / 12
         }
 
+def print_tax_slabs():
+    print("\n" + "="*100)
+    print("TAX SLAB DETAILS FOR NEW TAX REGIME")
+    print("="*100)
+    
+    # Print FY 2024-25 slabs
+    print("\nFY 2024-25 Tax Slabs:")
+    print("-"*100)
+    print(f"{'Income Range':<40} | {'Tax Rate':<15} | {'Notes':<40}")
+    print("-"*100)
+    
+    slab_2024 = TaxSlab2024()
+    for i, (lower, upper, rate) in enumerate(slab_2024.slabs):
+        range_text = f"₹{lower:,} to {'∞' if upper == float('inf') else f'₹{upper:,}'}"
+        print(f"{range_text:<40} | {f'{rate*100}%':<15} |")
+    
+    print(f"{'Tax Rebate':<40} | {'₹25,000':<15} | {'If income ≤ ₹7,00,000':<40}")
+    
+    # Print FY 2025-26 slabs
+    print("\nFY 2025-26 Tax Slabs:")
+    print("-"*100)
+    print(f"{'Income Range':<40} | {'Tax Rate':<15} | {'Notes':<40}")
+    print("-"*100)
+    
+    slab_2025 = TaxSlab2025()
+    for i, (lower, upper, rate) in enumerate(slab_2025.slabs):
+        range_text = f"₹{lower:,} to {'∞' if upper == float('inf') else f'₹{upper:,}'}"
+        print(f"{range_text:<40} | {f'{rate*100}%':<15} |")
+    
+    print(f"{'Tax Rebate':<40} | {'₹60,000':<15} | {'If income ≤ ₹12,00,000':<40}")
+    print("\nNote: These are rates for New Tax Regime only")
+
 def print_tax_comparison(income):
     calculator_2024 = TaxCalculator(2024)
     calculator_2025 = TaxCalculator(2025)
@@ -70,15 +102,32 @@ def print_tax_comparison(income):
     print("\nDetailed Tax Calculation for FY 2024-25:")
     for breakup in result_2024['tax_breakup']:
         print(breakup)
+    print(f"Total Tax before rebate: ₹{result_2024['total_tax']:,.2f}")
         
     print("\nDetailed Tax Calculation for FY 2025-26:")
     for breakup in result_2025['tax_breakup']:
         print(breakup)
+    print(f"Total Tax before rebate: ₹{result_2025['total_tax']:,.2f}")
 
 def main():
-    print("Income Tax Calculator - New Tax Regime")
-    income = float(input("Enter your taxable income: ₹"))
-    print_tax_comparison(income)
+    while True:
+        print("\nIncome Tax Calculator - New Tax Regime")
+        print("1. Calculate Tax")
+        print("2. View Tax Slabs")
+        print("3. Exit")
+        
+        choice = input("\nEnter your choice (1/2/3): ")
+        
+        if choice == '1':
+            income = float(input("Enter your taxable income: ₹"))
+            print_tax_comparison(income)
+        elif choice == '2':
+            print_tax_slabs()
+        elif choice == '3':
+            print("Thank you for using the Tax Calculator!")
+            break
+        else:
+            print("Invalid choice! Please try again.")
 
 if __name__ == "__main__":
     main() 
