@@ -116,9 +116,6 @@ def main():
     st.title("Income Tax Calculator - New Tax Regime")
     st.write("Compare your tax liability under FY 2024-25 and FY 2025-26 tax slabs")
     
-    # Display Tax Slabs
-    display_tax_slabs()
-    
     # Input Section
     st.header("Calculate Your Tax")
     income = st.number_input(
@@ -132,6 +129,13 @@ def main():
     
     if st.button("Calculate Tax"):
         calculate_and_display_tax(income)
+    
+    # Add a separator
+    st.markdown("---")
+    
+    # Display Tax Slabs at the bottom
+    st.header("Reference: Tax Slab Details")
+    display_tax_slabs()
 
 if __name__ == "__main__":
     main() 
