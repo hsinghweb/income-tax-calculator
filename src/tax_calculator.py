@@ -1,6 +1,6 @@
-from tax_slabs.tax_slab_2024 import TaxSlab2024
-from tax_slabs.tax_slab_2025 import TaxSlab2025
-from utils.helpers import format_currency
+from src.tax_slabs.tax_slab_2024 import TaxSlab2024
+from src.tax_slabs.tax_slab_2025 import TaxSlab2025
+from src.utils.helpers import format_currency
 
 class TaxCalculator:
     def __init__(self, regime_year):
