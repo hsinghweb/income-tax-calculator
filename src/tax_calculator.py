@@ -1,5 +1,6 @@
 from tax_slabs.tax_slab_2024 import TaxSlab2024
 from tax_slabs.tax_slab_2025 import TaxSlab2025
+from utils.helpers import format_currency
 
 class TaxCalculator:
     def __init__(self, regime_year):
@@ -38,30 +39,46 @@ class TaxCalculator:
             'monthly_in_hand': (income - final_tax) / 12
         }
 
-def main():
-    print("Tax Calculator")
-    print("1. Calculate tax for FY 2024-25")
-    print("2. Calculate tax for FY2025-26")
+def print_tax_comparison(income):
+    calculator_2024 = TaxCalculator(2024)
+    calculator_2025 = TaxCalculator(2025)
     
-    choice = int(input("Enter your choice (1/2): "))
-    income = float(input("Enter your taxable income: ₹"))
+    result_2024 = calculator_2024.calculate_tax(income)
+    result_2025 = calculator_2025.calculate_tax(income)
     
-    regime_year = 2024 if choice == 1 else 2025
-    calculator = TaxCalculator(regime_year)
-    result = calculator.calculate_tax(income)
+    print("\n" + "="*80)
+    print(f"Tax Comparison for Income: {format_currency(income)}")
+    print("="*80)
     
-    print("\nTax Calculation Details:")
-    print(f"Taxable Income: ₹{result['taxable_income']:,.2f}")
-    print("\nTax Calculation Breakup:")
-    for breakup in result['tax_breakup']:
+    # Print table header
+    print(f"{'Details':<30} | {'FY 2024-25':<20} | {'FY 2025-26':<20}")
+    print("-"*80)
+    
+    # Print table rows
+    rows = [
+        ("Taxable Income", result_2024['taxable_income'], result_2025['taxable_income']),
+        ("Total Tax", result_2024['total_tax'], result_2025['total_tax']),
+        ("Tax Rebate", result_2024['rebate'], result_2025['rebate']),
+        ("Final Tax Payable", result_2024['final_tax'], result_2025['final_tax']),
+        ("Annual In-Hand Salary", result_2024['annual_in_hand'], result_2025['annual_in_hand']),
+        ("Monthly In-Hand Salary", result_2024['monthly_in_hand'], result_2025['monthly_in_hand'])
+    ]
+    
+    for label, val_2024, val_2025 in rows:
+        print(f"{label:<30} | {format_currency(val_2024):<20} | {format_currency(val_2025):<20}")
+    
+    print("\nDetailed Tax Calculation for FY 2024-25:")
+    for breakup in result_2024['tax_breakup']:
         print(breakup)
-    
-    if result['rebate'] > 0:
-        print(f"\nTax Rebate: ₹{result['rebate']:,.2f}")
-    
-    print(f"\nFinal Tax Payable: ₹{result['final_tax']:,.2f}")
-    print(f"Annual In-Hand Salary: ₹{result['annual_in_hand']:,.2f}")
-    print(f"Monthly In-Hand Salary: ₹{result['monthly_in_hand']:,.2f}")
+        
+    print("\nDetailed Tax Calculation for FY 2025-26:")
+    for breakup in result_2025['tax_breakup']:
+        print(breakup)
+
+def main():
+    print("Income Tax Calculator - New Tax Regime")
+    income = float(input("Enter your taxable income: ₹"))
+    print_tax_comparison(income)
 
 if __name__ == "__main__":
     main() 
